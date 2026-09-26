@@ -15,15 +15,27 @@ jobs:
       - uses: actions/checkout@v7
       - uses: actions/setup-go@v7
         with: { go-version: "1.27.1", cache: true }
-      - run: GOOS=linux GOARCH=amd64 go build -buildvcs=false -trimpath -ldflags="-s -w" -o bin/aii-linux-amd64 ./
-      - run: GOOS=linux GOARCH=arm64 go build -buildvcs=false -trimpath -ldflags="-s -w" -o bin/aii-linux-arm64 ./
-      - uses: docker/setup-buildx-action@v4
-      - uses: docker/login-action@v4
+
+      - name: go-linux-amd64
+        run: go build -buildvcs=false -trimpath -ldflags="-s -w" -o bin/aii-linux-amd64 ./
+        env: { GOOS: linux, GOARCH: amd64 }
+
+      - name: go-linux-arm64
+        run: go build -buildvcs=false -trimpath -ldflags="-s -w" -o bin/aii-linux-arm64 ./
+        env: { GOOS: linux, GOARCH: arm64 }
+
+      - name: docker/buildx
+        uses: docker/setup-buildx-action@v4
+
+      - name: docker/login
+        uses: docker/login-action@v4
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - uses: docker/build-push-action@v7
+
+      - name: docker/push
+        uses: docker/build-push-action@v7
         with:
           context: .
           push: true
