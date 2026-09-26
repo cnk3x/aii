@@ -1,5 +1,5 @@
 FROM busybox:latest
 ARG TARGETOS TARGETARCH
-COPY /bin/aii-${TARGETOS}-${TARGETARCH} /bin/aii
+COPY bin/aii-${TARGETOS}-${TARGETARCH} /bin/aii
 USER 65534:65534
 ENTRYPOINT ["/bin/aii"]
