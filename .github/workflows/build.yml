@@ -37,7 +37,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: docker/push
+      - name: Build and push Docker images
         uses: docker/build-push-action@v7
         with:
           platforms: linux/amd64,linux/arm64
