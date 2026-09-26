@@ -1,0 +1,5 @@
+/bin/
+config.json
+*.test
+coverage.out
+cn.Dockerfile
