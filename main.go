@@ -29,14 +29,12 @@ import (
 	"sigs.k8s.io/yaml"
 )
 
-// (freeze)
 func init() {
 	flag.Usage = func() {
 		fmt.Fprintf(flag.CommandLine.Output(), "%s -c/--config <config file path>\n", filepath.Base(os.Args[0]))
 	}
 }
 
-// (freeze)
 func main() {
 	var configFile string
 
@@ -46,6 +44,8 @@ func main() {
 
 	ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGABRT, syscall.SIGTERM)
 	defer stop()
+
+	configFile = cmp.Or(configFile, filepath.Join("data", "config.yaml"))
 
 	var config Config
 	if err := unmarshalFile(configFile, &config); err != nil {
@@ -61,7 +61,7 @@ func main() {
 	slog.Info("done")
 }
 
-// Config 配置文件  (freeze)
+// Config 配置文件
 type Config struct {
 	Listen string   `json:"listen"` // 监听地址
 	Tokens []string `json:"tokens"` // 鉴权令牌
@@ -70,7 +70,7 @@ type Config struct {
 	Models    map[string]ModelEntry `json:"models"`    // [请求模型]上游模型
 }
 
-// Provider 描述一个上游 LLM 服务。 (freeze)
+// Provider 描述一个上游 LLM 服务。
 type Provider struct {
 	Name   string `json:"name"`   // 服务名称
 	URL    string `json:"url"`    // 服务地址
@@ -81,7 +81,7 @@ type Provider struct {
 	url *url.URL
 }
 
-// ModelEntry 模型映射， name -> provider/model (freeze)
+// ModelEntry 模型映射， name -> provider/model
 type ModelEntry struct {
 	Provider string `json:"provider"` // 转发到上游
 	Model    string `json:"model"`    // 转发模型名称
@@ -219,7 +219,7 @@ func modelHandler(cfg *Config) http.Handler {
 	})
 }
 
-// unmarshalFile 从 file 读取文本并以JSON/YAML格式解码。支持JSON Comment。 (freeze)
+// unmarshalFile 从 file 读取文本并以JSON/YAML格式解码。支持JSON Comment。
 func unmarshalFile[T any](file string, cfg *T) (err error) {
 	raw, e := os.ReadFile(file)
 	if err = e; err != nil {
@@ -256,7 +256,7 @@ func unmarshalFile[T any](file string, cfg *T) (err error) {
 	return
 }
 
-// Serve 启动 HTTP 服务器 (freeze)
+// Serve 启动 HTTP 服务器
 func webServe(ctx context.Context, listen string, mux http.Handler) <-chan error {
 	s := &http.Server{
 		Addr:              listen,
