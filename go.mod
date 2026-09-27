@@ -3,6 +3,7 @@ module github.com/cnk3x/aii
 go 1.27
 
 require (
+	github.com/spf13/pflag v1.0.10
 	github.com/tidwall/gjson v1.19.0
 	github.com/tidwall/jsonc v0.3.3
 	github.com/tidwall/sjson v1.2.5

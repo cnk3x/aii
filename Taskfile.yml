@@ -5,6 +5,7 @@ vars:
     OUT: bin/{{.NAME}}
     CONFIG: config.json
     GOBUILD: go build -buildvcs=false -trimpath -ldflags="-s -w"
+    WSL_DOCKER_BUILD: wsl docker build --progress plain -t cnk3x/{{.NAME}}:latest --platform linux/amd64,linux/arm64 .
 
 tasks:
     default:
@@ -16,14 +17,14 @@ tasks:
             - GOOS=linux GOARCH=arm64 {{.GOBUILD}} -o {{.OUT}}-linux-arm64 ./
             - GOOS=windows GOARCH=arm64 {{.GOBUILD}} -o {{.OUT}}.exe ./
 
-    docker:
+    docker_build:
         deps:
             - build
         cmds:
-            - "wsl docker build --progress plain -t cnk3x/{{.NAME}}:latest --platform linux/amd64,linux/arm64 ."
+            - "{{ .WSL_DOCKER_BUILD }} --load"
 
-    push:
+    docker_push:
         deps:
             - build
         cmds:
-            - "wsl docker build --progress plain -t cnk3x/{{.NAME}}:latest --platform linux/amd64,linux/arm64 ."
+            - "{{ .WSL_DOCKER_BUILD }} --push"

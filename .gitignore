@@ -2,4 +2,5 @@
 config.json
 *.test
 coverage.out
-cn.Dockerfile
+.DS_Store
+.continue/
