@@ -23,11 +23,11 @@ jobs:
         uses: docker/setup-buildx-action@v4
 
       - name: gobuild-linux-amd64
-        run: go build -buildvcs=false -trimpath -ldflags="-s -w" -o bin/aii-linux-amd64 ./
+        run: go build -buildvcs=false -trimpath -ldflags="-s -w" -o ./aii-linux-amd64 ./
         env: { GOOS: linux, GOARCH: amd64 }
 
       - name: gobuild-linux-arm64
-        run: go build -buildvcs=false -trimpath -ldflags="-s -w" -o bin/aii-linux-arm64 ./
+        run: go build -buildvcs=false -trimpath -ldflags="-s -w" -o ./aii-linux-arm64 ./
         env: { GOOS: linux, GOARCH: arm64 }
 
       - name: Login to ghcr

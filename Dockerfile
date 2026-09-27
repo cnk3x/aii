@@ -1,5 +1,5 @@
 FROM busybox:latest
 ARG TARGETOS TARGETARCH
-COPY bin/aii-${TARGETOS}-${TARGETARCH} /bin/aii
+COPY --chown=65534:65534 aii-${TARGETOS}-${TARGETARCH} /aii
 USER 65534:65534
-ENTRYPOINT ["/bin/aii"]
+ENTRYPOINT ["/aii"]
