@@ -16,6 +16,12 @@ jobs:
       - uses: actions/setup-go@v7
         with: { go-version: "1.27.1", cache: true }
 
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v4
+
       - name: gobuild-linux-amd64
         run: go build -buildvcs=false -trimpath -ldflags="-s -w" -o bin/aii-linux-amd64 ./
         env: { GOOS: linux, GOARCH: amd64 }
@@ -23,12 +29,6 @@ jobs:
       - name: gobuild-linux-arm64
         run: go build -buildvcs=false -trimpath -ldflags="-s -w" -o bin/aii-linux-arm64 ./
         env: { GOOS: linux, GOARCH: arm64 }
-
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v4
-        
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v4
 
       - name: Login to ghcr
         uses: docker/login-action@v4
